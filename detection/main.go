@@ -2,13 +2,22 @@ package main
 
 import (
 	"fmt"
-	"image/color"
 	"os"
+	"time"
+
+	"encoding/json"
+	"image/color"
+	"io/ioutil"
 
 	"gocv.io/x/gocv"
 )
 
 const MinimumArea = 3000
+
+type Centroid struct {
+	Timestamp int64
+	X, Y      int
+}
 
 func main() {
 	if len(os.Args) < 2 {
@@ -25,6 +34,14 @@ func main() {
 		return
 	}
 	defer webcam.Close()
+
+	file, err := os.OpenFile("test.json", os.O_CREATE, 0600)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("Successfully Opened test.json")
+	defer file.Close()
 
 	window := gocv.NewWindow("Motion Window")
 	defer window.Close()
@@ -55,11 +72,16 @@ func main() {
 	}
 	defer writer.Close()
 
+	var data []Centroid
+	var outData []byte
+	oldData, _ := ioutil.ReadAll(file)
+	json.Unmarshal(oldData, &data)
+
 	fmt.Printf("Start reading device: %v\n", deviceID)
 	for {
 		if ok := webcam.Read(&img); !ok {
 			fmt.Printf("Device closed: %v\n", deviceID)
-			return
+			break
 		}
 
 		if img.Empty() {
@@ -73,23 +95,35 @@ func main() {
 
 		contours := gocv.FindContours(imgThresh, gocv.RetrievalExternal, gocv.ChainApproxSimple)
 
+		gocv.CvtColor(img, &img, gocv.ColorGrayToBGR)
+
+		sec := time.Now().UnixMilli()
 		for i := 0; i < contours.Size(); i++ {
 			area := gocv.ContourArea(contours.At(i))
 			if area < MinimumArea {
 				continue
 			}
 
+			point := gocv.MinAreaRect(contours.At(i)).Center
+			data = append(data, Centroid{Timestamp: sec, X: point.X, Y: point.Y})
+			outData, _ = json.Marshal(data)
+			pt, _ := json.Marshal(Centroid{Timestamp: sec, X: point.X, Y: point.Y})
+			fmt.Println(string(pt))
+
+			gocv.Circle(&img, point, 5, color.RGBA{255, 0, 0, 0}, -1)
+
 			statusColor := color.RGBA{255, 0, 0, 0}
 			gocv.DrawContours(&img, contours, i, statusColor, 2)
-
-			rect := gocv.BoundingRect(contours.At(i))
-			gocv.Rectangle(&img, rect, color.RGBA{0, 0, 255, 0}, 2)
 		}
 
-		// writer.Write(imgDelta)
+		//writer.Write(imgDelta)
 		window.IMShow(img)
 		if window.WaitKey(1) == 27 {
 			break
 		}
+	}
+	err = ioutil.WriteFile("test.json", outData, 0600)
+	if err != nil {
+		fmt.Println(err)
 	}
 }
