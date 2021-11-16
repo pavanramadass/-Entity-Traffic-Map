@@ -8,8 +8,9 @@ import (
 
 type test_struct struct {
 	Request_Type string
-	Arg1 string
-	Arg2 string
+	Start_Date string
+	End_Date string
+	Data_Content string
 }
 
 
@@ -27,12 +28,19 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err)
 		}
-		log.Println(t.Request_Type)
-		log.Println(t.Arg1)
-		log.Println(t.Arg2)
-		a := []byte(`{"Request_Type":"` + t.Request_Type + `", "Arg1": "` + t.Arg1 + `", "Arg2": "` + t.Arg2 + `"}`)
-		log.Println(a)
-		w.Write(a)
+		if (t.Request_Type == "data_schedule") {
+			log.Println("Data scheduling requested")
+			res := []byte(`{"Request_Type":"` + t.Request_Type + `", "Start_Date": "` + t.Start_Date + `", "End_Date": "` + t.End_Date + `"}`)
+			w.Write(res)
+		} else if (t.Request_Type == "map_generation") {
+			log.Println("Map generation requested")
+			res := []byte(`{"Request_Type":"` + t.Request_Type + `", "Data_Content": "` + t.Data_Content + `"}`)
+			w.Write(res)
+		} else if (t.Request_Type == "cancel_schedule") {
+			log.Println("Cancelling schedule")
+			res := []byte(`{"Request_Type:"` + t.Request_Type + `"}`)
+			w.Write(res)
+		}
 	}
 }
 
