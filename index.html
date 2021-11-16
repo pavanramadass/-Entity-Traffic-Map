@@ -30,7 +30,7 @@
                     <div id="status_bar">
                         <p>Curent Status: Collection Scheduled <br> Schedule:</p>
                     </div>
-                    <div id="edit_schedule" onclick="edit_schedule()">
+                    <div id="edit_schedule" onclick="edit_modal()">
                         <p>Edit Schedule</p>
                     </div>
                     <div id="cancel_schedule" onclick="cancel_schedule()">
@@ -46,6 +46,12 @@
                         <label>Starting Date/Time </label><select class="bear-dates"></select> <select class="bear-months"></select><select class="bear-years"></select><br><br>
                         <label>Ending Date/Time </label><select class="bear-dates"></select> <select class="bear-months"></select><select class="bear-years"></select><br><br>
                         <button onclick="data_collection()">Submit</button>
+                    </div>
+                    <div id = "edit_modal">
+                        <header><strong>Edit Data Collection</strong></header><br>
+                        <label>Starting Date/Time </label><select class="bear-dates"></select> <select class="bear-months"></select><select class="bear-years"></select><br><br>
+                        <label>Ending Date/Time </label><select class="bear-dates"></select> <select class="bear-months"></select><select class="bear-years"></select><br><br>
+                        <button onclick="edit_schedule()">Submit</button>
                     </div>
                     <div id = "download_modal">
                         <header>Data Downloaded</header>

@@ -1,6 +1,15 @@
 function collection_modal() {
     document.getElementById("modal").style.display = "block";
     document.getElementById("collection_modal").style.display = "block";
+    document.getElementById("edit_modal").style.display = "none";
+    document.getElementById("download_modal").style.display = "none";
+    document.getElementById("heat_map_modal").style.display = "none";
+}
+
+function edit_modal() {
+    document.getElementById("modal").style.display = "block";
+    document.getElementById("collection_modal").style.display = "none";
+    document.getElementById("edit_modal").style.display = "block";
     document.getElementById("download_modal").style.display = "none";
     document.getElementById("heat_map_modal").style.display = "none";
 }
@@ -8,6 +17,7 @@ function collection_modal() {
 function download_modal() {
     document.getElementById("modal").style.display = "block";
     document.getElementById("collection_modal").style.display = "none";
+    document.getElementById("edit_modal").style.display = "none";
     document.getElementById("download_modal").style.display = "block";
     document.getElementById("heat_map_modal").style.display = "none";
     download_data();
@@ -23,16 +33,13 @@ function heat_map_modal() {
     }
     document.getElementById("modal").style.display = "block";
     document.getElementById("collection_modal").style.display = "none";
+    document.getElementById("edit_modal").style.display = "none";
     document.getElementById("download_modal").style.display = "none";
     document.getElementById("heat_map_modal").style.display = "block";
 }
 
 function close_modal() {
     document.getElementById("modal").style.display = "none";
-}
-
-function edit_schedule() {
-    collection_modal();
 }
 
 function data_collection() {
@@ -46,6 +53,41 @@ function data_collection() {
         url: "/form",
         data: JSON.stringify({
             "Request_Type": "data_schedule", 
+            "Start_Date": start_date, 
+            "End_Date": end_date
+        }),
+        success: function(response) {
+            console.log(response);
+            json = JSON.parse(response);
+            document.getElementById("status_bar").style.backgroundColor = "#22bd0d";
+            document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Scheduled<br>Schedule: " 
+                + json.Start_Date + " to " + json.End_Date + "</p>";
+            document.getElementById("edit_schedule").style.display = "block";
+            document.getElementById("cancel_schedule").style.display = "block";
+            for (i = 0; i < 2; i++) {
+                dates[i+2].value = dates[i].value
+                months[i+2].value = months[i].value;
+                years[i+2].value = years[i].value;
+                dates[i].value = 1;
+                months[i].value = 'January'
+                years[i].value = 2021;
+            }
+            close_modal();
+        }
+    });
+}
+
+function edit_schedule() {
+    dates = document.getElementsByClassName("bear-dates");
+    months = document.getElementsByClassName("bear-months");
+    years = document.getElementsByClassName("bear-years");
+    start_date = years[2].value + '-' + months[2].value + '-' + dates[2].value;
+    end_date = years[3].value + '-' + months[3].value + '-' + dates[3].value;
+    $.ajax({
+        type: "POST",
+        url: "/form",
+        data: JSON.stringify({
+            "Request_Type": "edit_schedule", 
             "Start_Date": start_date, 
             "End_Date": end_date
         }),

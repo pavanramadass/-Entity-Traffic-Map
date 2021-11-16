@@ -32,6 +32,10 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 			log.Println("Data scheduling requested")
 			res := []byte(`{"Request_Type":"` + t.Request_Type + `", "Start_Date": "` + t.Start_Date + `", "End_Date": "` + t.End_Date + `"}`)
 			w.Write(res)
+		} else if (t.Request_Type == "edit_schedule") {
+			log.Println("Edit scheduling requested")
+			res := []byte(`{"Request_Type":"` + t.Request_Type + `", "Start_Date": "` + t.Start_Date + `", "End_Date": "` + t.End_Date + `"}`)
+			w.Write(res)
 		} else if (t.Request_Type == "map_generation") {
 			log.Println("Map generation requested")
 			res := []byte(`{"Request_Type":"` + t.Request_Type + `", "Data_Content": "` + t.Data_Content + `"}`)
