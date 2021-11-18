@@ -5,25 +5,23 @@ import (
 	"os"
 	"time"
 
-	"encoding/json"
 	"image/color"
-	"io/ioutil"
 
 	"gocv.io/x/gocv"
+
+	"detection/data"
 )
 
 const MinimumArea = 3000
-
-type Centroid struct {
-	Timestamp int64
-	X, Y      int
-}
+const fileName = "data_capture.json"
 
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("How to run:\n\tmotion-detect [camera ID]")
 		return
 	}
+
+	var data data.Data
 
 	// parse args
 	deviceID := os.Args[1]
@@ -35,14 +33,7 @@ func main() {
 	}
 	defer webcam.Close()
 
-	/*
-	file, err := os.OpenFile("test.json", os.O_CREATE, 0600)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	} */
-	fmt.Println("Successfully Opened test.json")
-	defer file.Close()
+	data.ImportData(fileName)
 
 	window := gocv.NewWindow("Motion Window")
 	defer window.Close()
@@ -73,11 +64,6 @@ func main() {
 	}
 	defer writer.Close()
 
-	var data []Centroid
-	var outData []byte
-	oldData, _ := ioutil.ReadAll(file)
-	json.Unmarshal(oldData, &data)
-
 	fmt.Printf("Start reading device: %v\n", deviceID)
 	for {
 		if ok := webcam.Read(&img); !ok {
@@ -106,10 +92,7 @@ func main() {
 			}
 
 			point := gocv.MinAreaRect(contours.At(i)).Center
-			data = append(data, Centroid{Timestamp: sec, X: point.X, Y: point.Y})
-			outData, _ = json.Marshal(data)
-			pt, _ := json.Marshal(Centroid{Timestamp: sec, X: point.X, Y: point.Y})
-			fmt.Println(string(pt))
+			data.StoreData(sec, point.X, point.Y)
 
 			gocv.Circle(&img, point, 5, color.RGBA{255, 0, 0, 0}, -1)
 
@@ -123,30 +106,16 @@ func main() {
 			break
 		}
 	}
-	/*
-	err = ioutil.WriteFile("test.json", outData, 0600)
-	if err != nil {
-		fmt.Println(err)
-	}
-	*/
-}
 
-/*
- * Overview: Opens a file 
- * Parameters:
- *	- fileName: the name of the file to be opened 
- * Returns:
- *	- true: returns false, nil for file, and function error message 
- *	- false: returns true, file, and function error message 
-*/
-func openFile(fileName) {
-	file, err := os.OpenFile(fileName, os.O_CREATE, 0600)
-	if err != nil {
-		return false, nil, err 
-	}
-	else {
-		return true, file, err
-	}
+  /*
+   * Overview: Opens a file 
+   * Parameters:
+   *	- fileName: the name of the file to be opened 
+   * Returns:
+   *	- true: returns false, nil for file, and function error message 
+   *	- false: returns true, file, and function error message 
+  */
+	data.ExportData(fileName)
 }
 
 /*
