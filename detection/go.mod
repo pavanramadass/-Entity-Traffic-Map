@@ -1,3 +1,5 @@
 module detection
 
-require gocv.io/x/gocv v0.28.0 // indirect
+go 1.17
+
+require gocv.io/x/gocv v0.28.0
