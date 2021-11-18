@@ -106,5 +106,52 @@ func main() {
 			break
 		}
 	}
+
+  /*
+   * Overview: Opens a file 
+   * Parameters:
+   *	- fileName: the name of the file to be opened 
+   * Returns:
+   *	- true: returns false, nil for file, and function error message 
+   *	- false: returns true, file, and function error message 
+  */
 	data.ExportData(fileName)
+}
+
+/*
+ * Overview: Writes to a file 
+ * Parameters:
+ *	- fileName: the name of the file to be written 
+ * Returns:
+ *	- true: returns false, nil for file, and function error message 
+ *	- false: returns true, file, and function error message 
+*/
+func writeFile(fileName) {
+	file, err := ioutil.WriteFile(fileName, outData, 0600)
+	if err != nil {
+		return false, nil, err
+	}
+	else {
+		return true, file, err
+	}
+}
+
+/*
+ * Overview: Opens the Video Capture Device  
+ * Parameters:
+ *	- deviceID: The id of the video capture device 
+ * Returns:
+ *	- true: returns false and function error message 
+ *	- false: returns true and function error message 
+*/
+func openVideoCapture(deviceID) {
+	webcam, err := gocv.OpenVideoCapture(deviceID)
+	if err != nil {
+		fmt.Printf("Error opening video capture device: %v\n", deviceID)
+		return false, err
+	}
+	else {
+		return true, err
+	}
+	defer webcam.Close()
 }
