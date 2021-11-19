@@ -62,6 +62,8 @@ func GenerateHeatmapFromCSVFile(metaDataFileName string) {
 	heatmapFile, _ := os.Create("heatmap.png")
 	png.Encode(heatmapFile, heatmap)
 	heatmapFile.Close()
+
+	return true 
 }
 
 // GetPixelCounts does ... 
@@ -103,7 +105,7 @@ func generateHeatmapImage(pixelCounts [][]int, minCount int, maxCount int, image
 			heatmapImage.Set(x, y, pixelCountToColor(pointCount, minCount, maxCount))
 		}
 	}
-	return heatmapImage
+	return heatmapImage, true
 
 }
 
