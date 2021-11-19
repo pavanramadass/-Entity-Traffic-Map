@@ -19,12 +19,14 @@ jobs:
         go-version: 1.17
 
     - name: Build
-      working-directory: ./../detection
-      run: go build -v
+      run: |
+        cd ./../detection
+        go build -v
 
     - name: Test
-      working-directory: ./../detection
-      run: go test -v
+      run: |
+        cd ./../detection
+        go test -v
  # main:
  #   runs-on: ubuntu-latest
  #   name: Example
