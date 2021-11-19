@@ -19,10 +19,10 @@ jobs:
         go-version: 1.16
 
     - name: Build
-      run: go build -v ./...
+      run: go build -v ./detection
 
     - name: Test
-      run: go test -v ./...
+      run: go test -v ./detection
  # main:
  #   runs-on: ubuntu-latest
  #   name: Example
