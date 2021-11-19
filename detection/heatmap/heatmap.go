@@ -26,10 +26,12 @@ func GenerateHeatmapFromCSVFile(metaDataFileName string) {
 	metaDataFile, err := os.Open(metaDataFileName)
 	if err != nil {
 		log.Fatal("Error: Failed to open metadata file "+metaDataFileName, err)
+		return err
 	}
 	metaDataJson, err := ioutil.ReadAll(metaDataFile)
 	if err != nil {
 		log.Fatal("Error: Failed to read metadata file "+metaDataFileName+": ", err)
+		return err
 	}
 	metaDataFile.Close()
 
@@ -38,12 +40,14 @@ func GenerateHeatmapFromCSVFile(metaDataFileName string) {
 	err = json.Unmarshal(metaDataJson, &metadata)
 	if err != nil {
 		log.Fatal("Error: Failed to parse metadata JSON: ", err)
+		return err
 	}
 
 	// Open data file
 	csvFile, err := os.Open(metadata.DataFileName)
 	if err != nil {
 		log.Fatal("Error: Failed to open data file "+metaDataFileName+": ", err)
+		return err
 	}
 
 	// Parse CSV data
@@ -51,6 +55,7 @@ func GenerateHeatmapFromCSVFile(metaDataFileName string) {
 	data, err := reader.ReadAll()
 	if err != nil {
 		log.Fatal("Error: Failed to parse CSV file "+metaDataFileName+": ", err)
+		return err
 	}
 	csvFile.Close()
 
