@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang=en>
+    <head>
+        <title>SD&D Project</title>
+        <link rel="stylesheet" href="res/style/main.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="res/script.js"></script>
+        <script src="res/calender.js">
+            dates('option');
+            months('option');
+            //You can change the startYear(1990) and endYear(2017)
+            years('option', 2021, 2022);</script>
+        <script>
+            
+        </script>
+		<meta charset="UTF-8">
+    </head>
+    <body>
+        <div class="container">
+            <div id="camera-view">
+            </div>
+            <div class="row">
+                <div class="triple_button" id = "schedule_button" onclick="collection_modal()">Schedule Data Collection</div>
+                <div class="triple_button" id = "download_button" onclick="download_modal()">Download Data</div>
+                <div class="triple_button" id = "generate_button" onclick="heat_map_modal()">Generate Heat Map</div>
+            </div><br>
+            <div class="row">
+                <div id="status_bar_wrapper">
+                    <div id="status_bar">
+                        <p>Curent Status: Collection Scheduled <br> Schedule:</p>
+                    </div>
+                    <div id="edit_schedule" onclick="edit_modal()">
+                        <p>Edit Schedule</p>
+                    </div>
+                    <div id="cancel_schedule" onclick="cancel_schedule()">
+                        <p>Cancel Schedule</p>
+                    </div>
+                </div>
+            </div>
+            <div id = "modal">
+                <div class="modal-content">
+                    <span class="close" onclick="close_modal()">&times;</span>
+                    <div id = "collection_modal">
+                        <header><strong>Schedule Data Collection</strong></header><br>
+                        <label>Starting Date/Time </label><select class="bear-dates"></select> <select class="bear-months"></select><select class="bear-years"></select><br><br>
+                        <label>Ending Date/Time </label><select class="bear-dates"></select> <select class="bear-months"></select><select class="bear-years"></select><br><br>
+                        <button onclick="data_collection()">Submit</button>
+                    </div>
+                    <div id = "edit_modal">
+                        <header><strong>Edit Data Collection</strong></header><br>
+                        <label>Starting Date/Time </label><select class="bear-dates"></select> <select class="bear-months"></select><select class="bear-years"></select><br><br>
+                        <label>Ending Date/Time </label><select class="bear-dates"></select> <select class="bear-months"></select><select class="bear-years"></select><br><br>
+                        <button onclick="edit_schedule()">Submit</button>
+                    </div>
+                    <div id = "download_modal">
+                        <header>Data Downloaded</header>
+                    </div>
+                    <div id = "heat_map_modal">
+                        <header><strong>Generate Heat Map For</strong></header>
+                        <p><input type="checkbox" id="data_checkbox" name="Local_data" value="Yes">Use Data Currently Stored</p>
+                        <button onclick="generate_map()">Generate</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

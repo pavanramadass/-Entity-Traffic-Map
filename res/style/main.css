@@ -1,0 +1,158 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    font-size: 16px;
+}
+
+select {
+    width: 20%;
+    margin: 0;
+    font-size: 100%;
+    padding: 5px 10px 5px 10px;
+    font-family: Segoe UI, Helvetica, sans-serif;
+    border: 0;
+    border: 1px solid #D0D0D0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: none;    
+  }
+
+#camera-view {
+    height:70vh;
+    width: 97vw;
+    background-color: aqua;
+    background-image: url("../image/stock.jpg");
+    border: 5px solid red;
+}
+
+.container {
+    height: 100vh;
+    width: 98vw;
+}
+
+.row {
+    width: 98vw;
+    margin-bottom: 10px;
+}
+
+.triple_button {
+    margin-top: 10px;
+    float: left;
+    width:33.33%;
+    text-align: center;
+    border: none;
+    border-radius: 50%;
+    height: 7vh;
+    line-height: 7vh;
+    background-color: blue;
+    color: white;
+}
+
+.triple_button:after {
+    content: "";
+    display: table;
+}
+
+.triple_button:hover {
+    cursor: pointer;
+}
+
+#status_bar {
+    position: absolute;
+    margin-top: 45px;
+    width: 98vw;
+    height: 50px;
+    text-align: center;
+    background-color: orange;
+    color: white;
+    border-radius: 25px;
+}
+
+#status_bar p {
+    margin-top: 8px;
+    vertical-align: center;
+}
+
+#edit_schedule {
+    display: none;
+    position: absolute;
+    margin-top: 45px;
+    right: 150px;
+    background-color: blue;
+    text-align: center;
+    color: white;
+    width: 100px;
+    border-radius: 25px;
+}
+
+#edit_schedule:hover {
+    cursor: pointer;
+}
+
+#cancel_schedule {
+    display: none;
+    position: absolute;
+    margin-top: 45px;
+    right: 0;
+    background-color: red;
+    text-align: center;
+    color: white;
+    width: 150px;
+    border-radius: 25px;
+}
+
+#cancel_schedule {
+    cursor: pointer;
+}
+
+/* The Modal (background) */
+#modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 5px;
+}
+  
+/* Modal Content/Box */
+.modal-content {
+    text-align: center;
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%; /* Could be more or less, depending on screen size */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@keyframes animatetop {
+    from {top: 100px; opacity: 0}
+    to {top: 300px; opacity: 1}
+  }
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+  
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
