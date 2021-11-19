@@ -149,11 +149,12 @@ function generate_map() {
         }),
         success: function(response) {
             console.log(response);
+            json = JSON.parse(response);
             var button = document.getElementById("generate_button");
             var cameraView = document.getElementById("camera-view");
             if (button.innerHTML == 'Generate Heat Map') {
                 button.innerHTML = 'Return to Map View';
-                cameraView.style.backgroundImage = "url('res/image/filled.png')";
+                cameraView.style.backgroundImage = json.Data_Content;
             } else {
                 button.innerHTML = 'Generate Heat Map';
                 cameraView.style.backgroundImage = "url('res/image/stock.jpg')";
