@@ -20,11 +20,11 @@ jobs:
 
     - name: Build
       working-directory: ./../detection
-      run: go build -v ./../detection
+      run: go build -v
 
     - name: Test
       working-directory: ./../detection
-      run: go test -v ./../detection
+      run: go test -v
  # main:
  #   runs-on: ubuntu-latest
  #   name: Example
