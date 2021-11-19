@@ -20,12 +20,12 @@ jobs:
 
     - name: Build
       run: |
-        cd ./../detection
+        cd ./detection
         go build -v
 
     - name: Test
       run: |
-        cd ./../detection
+        cd ./detection
         go test -v
  # main:
  #   runs-on: ubuntu-latest
