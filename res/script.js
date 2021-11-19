@@ -1,3 +1,8 @@
+window.onload = function() {
+    get_schedule();
+    setInterval(get_schedule, 1000*60*60);
+};
+
 function collection_modal() {
     document.getElementById("modal").style.display = "block";
     document.getElementById("collection_modal").style.display = "block";
@@ -59,9 +64,22 @@ function data_collection() {
         success: function(response) {
             console.log(response);
             json = JSON.parse(response);
-            document.getElementById("status_bar").style.backgroundColor = "#22bd0d";
-            document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Scheduled<br>Schedule: " 
-                + json.Start_Date + " to " + json.End_Date + "</p>";
+            var today = new Date();
+            var start_date = new Date(json.Start_Date);
+            var end_date = new Date(json.End_Date);
+            if (start_date < today && today < end_date) {
+                document.getElementById("status_bar").style.backgroundColor = "purple";
+                document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection in Progress<br>Schedule: " 
+                    + json.Start_Date + " to " + json.End_Date + "</p>";
+            } else if (today > end_date) {
+                document.getElementById("status_bar").style.backgroundColor = "#73b504";
+                document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Completed<br>Schedule: " 
+                    + json.Start_Date + " to " + json.End_Date + "</p>";
+            } else {
+                document.getElementById("status_bar").style.backgroundColor = "#22bd0d";
+                document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Scheduled<br>Schedule: " 
+                    + json.Start_Date + " to " + json.End_Date + "</p>";
+            }
             document.getElementById("edit_schedule").style.display = "block";
             document.getElementById("cancel_schedule").style.display = "block";
             for (i = 0; i < 2; i++) {
@@ -94,11 +112,22 @@ function edit_schedule() {
         success: function(response) {
             console.log(response);
             json = JSON.parse(response);
-            document.getElementById("status_bar").style.backgroundColor = "#22bd0d";
-            document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Scheduled<br>Schedule: " 
-                + json.Start_Date + " to " + json.End_Date + "</p>";
-            document.getElementById("edit_schedule").style.display = "block";
-            document.getElementById("cancel_schedule").style.display = "block";
+            var today = new Date();
+            var start_date = new Date(json.Start_Date);
+            var end_date = new Date(json.End_Date);
+            if (start_date < today && today < end_date) {
+                document.getElementById("status_bar").style.backgroundColor = "purple";
+                document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection in Progress<br>Schedule: " 
+                    + json.Start_Date + " to " + json.End_Date + "</p>";
+            } else if (today > end_date) {
+                document.getElementById("status_bar").style.backgroundColor = "#73b504";
+                document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Completed<br>Schedule: " 
+                    + json.Start_Date + " to " + json.End_Date + "</p>";
+            } else {
+                document.getElementById("status_bar").style.backgroundColor = "#22bd0d";
+                document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Scheduled<br>Schedule: " 
+                    + json.Start_Date + " to " + json.End_Date + "</p>";
+            }
             close_modal();
         }
     });
@@ -131,7 +160,7 @@ function generate_map() {
             }
             close_modal();
         }
-    })
+    });
 }
 
 function cancel_schedule() {
@@ -149,5 +178,32 @@ function cancel_schedule() {
             document.getElementById("edit_schedule").style.display = "none";
             document.getElementById("cancel_schedule").style.display = "none";
         }
-    })
+    });
+}
+
+function get_schedule() {
+    $.ajax({
+        type: "GET",
+        url: "/form",
+        success: function(response) {
+            console.log(response)
+            json = JSON.parse(response);
+            var today = new Date();
+            var start_date = new Date(json.Start_Date);
+            var end_date = new Date(json.End_Date);
+            if (start_date < today && today < end_date) {
+                document.getElementById("status_bar").style.backgroundColor = "purple";
+                document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection in Progress<br>Schedule: " 
+                    + json.Start_Date + " to " + json.End_Date + "</p>";
+            } else if (today > end_date) {
+                document.getElementById("status_bar").style.backgroundColor = "#73b504";
+                document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Completed<br>Schedule: " 
+                    + json.Start_Date + " to " + json.End_Date + "</p>";
+            } else {
+                document.getElementById("status_bar").style.backgroundColor = "#22bd0d";
+                document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Scheduled<br>Schedule: " 
+                    + json.Start_Date + " to " + json.End_Date + "</p>";
+            }
+        }
+    });
 }

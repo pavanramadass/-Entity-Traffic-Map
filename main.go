@@ -21,6 +21,9 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	switch r.Method {
+	case "GET":
+		log.Println("Returning current schedule")
+		w.Write([]byte(`{"Request_Type": "get_schedule", "Start_Date": "2021-January-1", "End_Date": "2021-January-1"}`))
 	case "POST":
 		decoder := json.NewDecoder(r.Body)
 		var t test_struct
