@@ -7,21 +7,21 @@ import (
 	"io/ioutil"
 )
 
-// holds location data:
+// centroid struct holds location data:
 // Timestamp (millisecond precision), and X, Y pixel coordinates
 type centroid struct {
 	Timestamp int64
 	X, Y      int
 }
 
-// stores centroids in a list
+// Data struct stores centroids in a list.
 type Data struct {
 	stored_data []centroid
 }
 
-// import data from a file into stored_data
+// ImportData imports data from a file into stored_data.
 // If the file doesn't exist, create it.
-// stored_data is cleared before import occurs
+// Stored_data is cleared before import occurs.
 func (d *Data) ImportData(source string) error {
 	file, err := os.OpenFile(source, os.O_CREATE, 0600)
 	if err != nil {
@@ -41,7 +41,7 @@ func (d *Data) ImportData(source string) error {
 	return nil
 }
 
-// export stored_data into the specified .json
+// ExportData exports stored_data into the specified .json
 // @requires destination be in the form "[filename].json"
 func (d *Data) ExportData(destination string) error {
 	var out_data []byte
@@ -55,7 +55,7 @@ func (d *Data) ExportData(destination string) error {
 	return nil
 }
 
-// store a new centroid datapoint
+// StoreData stores a new centroid datapoint.
 func (d *Data) StoreData(sec int64, x, y int) {
 	d.stored_data = append(d.stored_data, centroid{Timestamp: sec, X: x, Y: y})
 }

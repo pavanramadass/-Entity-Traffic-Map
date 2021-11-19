@@ -56,13 +56,6 @@ func main() {
 	}
 
 	gocv.CvtColor(img, &img, gocv.ColorRGBToGray)
-	writer, err := gocv.VideoWriterFile("test.avi", "MJPG", 20, img.Cols(), img.Rows(), false)
-
-	if err != nil {
-		fmt.Printf("error opening video writer device: %v\n", "test.avi")
-		return
-	}
-	defer writer.Close()
 
 	fmt.Printf("Start reading device: %v\n", deviceID)
 	for {
@@ -100,33 +93,18 @@ func main() {
 			gocv.DrawContours(&img, contours, i, statusColor, 2)
 		}
 
-		//writer.Write(imgDelta)
 		window.IMShow(img)
 		if window.WaitKey(1) == 27 {
 			break
 		}
 	}
-
-  /*
-   * Overview: Opens a file 
-   * Parameters:
-   *	- fileName: the name of the file to be opened 
-   * Returns:
-   *	- true: returns false, nil for file, and function error message 
-   *	- false: returns true, file, and function error message 
-  */
 	data.ExportData(fileName)
 }
 
-/*
- * Overview: Writes to a file 
- * Parameters:
- *	- fileName: the name of the file to be written 
- * Returns:
- *	- true: returns false, nil for file, and function error message 
- *	- false: returns true, file, and function error message 
-*/
-func writeFile(fileName) {
+// WriteFile writes to a file and returns false, nil for file, and function error message if condition is true.
+// Else, it returns true, file name, and function error message if condition is false.
+// The only parameter is the file name. 
+func WriteFile(fileName) {
 	file, err := ioutil.WriteFile(fileName, outData, 0600)
 	if err != nil {
 		return false, nil, err
@@ -136,15 +114,10 @@ func writeFile(fileName) {
 	}
 }
 
-/*
- * Overview: Opens the Video Capture Device  
- * Parameters:
- *	- deviceID: The id of the video capture device 
- * Returns:
- *	- true: returns false and function error message 
- *	- false: returns true and function error message 
-*/
-func openVideoCapture(deviceID) {
+// OpenVideoCapture opens the video capture device and returns false and error message if conditional is true.
+// Else, it returns true and error message if conditional is false. 
+// It takes only one parameter: deviceID which is the ID of the video capture device.
+func OpenVideoCapture(deviceID) {
 	webcam, err := gocv.OpenVideoCapture(deviceID)
 	if err != nil {
 		fmt.Printf("Error opening video capture device: %v\n", deviceID)
