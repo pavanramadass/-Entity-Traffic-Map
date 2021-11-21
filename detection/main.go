@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"time"
 
@@ -103,19 +104,18 @@ func main() {
 
 // WriteFile writes to a file and returns false, nil for file, and function error message if condition is true.
 // Else, it returns true, file name, and function error message if condition is false.
-// The only parameter is the file name. 
+// The only parameter is the file name.
 func WriteFile(fileName) {
 	file, err := ioutil.WriteFile(fileName, outData, 0600)
 	if err != nil {
 		return false, nil, err
 	}
-	else {
-		return true, file, err
-	}
+
+	return true, file, err
 }
 
 // OpenVideoCapture opens the video capture device and returns false and error message if conditional is true.
-// Else, it returns true and error message if conditional is false. 
+// Else, it returns true and error message if conditional is false.
 // It takes only one parameter: deviceID which is the ID of the video capture device.
 func OpenVideoCapture(deviceID) {
 	webcam, err := gocv.OpenVideoCapture(deviceID)
@@ -123,8 +123,6 @@ func OpenVideoCapture(deviceID) {
 		fmt.Printf("Error opening video capture device: %v\n", deviceID)
 		return false, err
 	}
-	else {
-		return true, err
-	}
 	defer webcam.Close()
+	return true, err
 }
