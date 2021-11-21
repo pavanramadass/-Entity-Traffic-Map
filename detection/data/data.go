@@ -57,7 +57,8 @@ func (d *Data) ExportData(destination string) error {
 	return nil
 }
 
-// StoreData stores a single frame's worth of centroids datapoint.
+// StoreData stores a single centroid point at a time.
+// IT does so concurrently, consuming data points from a channel.
 func (d *Data) StoreData(pts <-chan image.Point) {
 	for pt := range pts {
 		sec := time.Now().UnixMilli()
