@@ -76,7 +76,7 @@ function data_collection() {
                 document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Completed<br>Schedule: " 
                     + json.Start_Date + " to " + json.End_Date + "</p>";
             } else {
-                document.getElementById("status_bar").style.backgroundColor = "#22bd0d";
+                document.getElementById("status_bar").style.backgroundColor = "orange";
                 document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Scheduled<br>Schedule: " 
                     + json.Start_Date + " to " + json.End_Date + "</p>";
             }
@@ -124,7 +124,7 @@ function edit_schedule() {
                 document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Completed<br>Schedule: " 
                     + json.Start_Date + " to " + json.End_Date + "</p>";
             } else {
-                document.getElementById("status_bar").style.backgroundColor = "#22bd0d";
+                document.getElementById("status_bar").style.backgroundColor = "orange";
                 document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Scheduled<br>Schedule: " 
                     + json.Start_Date + " to " + json.End_Date + "</p>";
             }
@@ -174,8 +174,8 @@ function cancel_schedule() {
         success: function(response) {
             console.log(response);
             var status_bar = document.getElementById("status_bar");
-            status_bar.innerHTML = "<p>Curent Status: Collection Scheduled <br> Schedule:</p>";
-            status_bar.style.backgroundColor = "orange";
+            status_bar.innerHTML = "<p>Curent Status: Collection Canceled</p>";
+            status_bar.style.backgroundColor = "red";
             document.getElementById("edit_schedule").style.display = "none";
             document.getElementById("cancel_schedule").style.display = "none";
         }
@@ -201,7 +201,7 @@ function get_schedule() {
                 document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Completed<br>Schedule: " 
                     + json.Start_Date + " to " + json.End_Date + "</p>";
             } else {
-                document.getElementById("status_bar").style.backgroundColor = "#22bd0d";
+                document.getElementById("status_bar").style.backgroundColor = "orange";
                 document.getElementById("status_bar").innerHTML = "<p>Curent Status: Collection Scheduled<br>Schedule: " 
                     + json.Start_Date + " to " + json.End_Date + "</p>";
             }
