@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"image"
 	"os"
 	"time"
@@ -84,13 +85,19 @@ func (d *Data) GetData(filters []int64) []Centroid {
 		end = filters[1]
 	}
 
-	step := int64(1)
+	skip := 1
 	if len(filters) > 2 {
-		step = filters[2]
+		skip = int(filters[2])
 	}
-	for i := int64(1); i < int64(len(filters)); i = i + step {
-		if d.data[i].Timestamp > start && (end == -1 || d.data[i].Timestamp < end) {
+
+	step := 1
+	fmt.Print("\n", start, end, step)
+	for i := 0; i < len(d.data); i = i + step {
+		time := d.data[i].Timestamp
+		fmt.Print("\n", time >= start, (end == -1 || time <= end))
+		if time >= start && (end == -1 || time <= end) {
 			filtered_data = append(filtered_data, d.data[i])
+			step = skip
 		}
 	}
 
