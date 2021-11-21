@@ -1,7 +1,6 @@
 package data
 
 import (
-	"fmt"
 	"image"
 	"os"
 	"time"
@@ -10,16 +9,16 @@ import (
 	"io/ioutil"
 )
 
-// Centroid struct holds location data:
+// centroid struct holds location data:
 // Timestamp (millisecond precision), and X, Y pixel coordinates
-type Centroid struct {
+type centroid struct {
 	Timestamp int64
 	X, Y      int
 }
 
-// Data struct stores Centroids in a list.
+// Data struct stores centroids in a list.
 type Data struct {
-	data []Centroid
+	data []centroid
 }
 
 // ImportData imports data from a file into data.
@@ -37,7 +36,7 @@ func (d *Data) ImportData(source string) error {
 		return err
 	}
 
-	var temp_data []Centroid
+	var temp_data []centroid
 	json.Unmarshal(imported_data, &temp_data)
 	d.data = append(d.data, temp_data...)
 
@@ -58,11 +57,11 @@ func (d *Data) ExportData(destination string) error {
 	return nil
 }
 
-// StoreData stores a single frame's worth of Centroids datapoint.
-func (d *Data) StoreData(pts []image.Point) {
-	sec := time.Now().UnixMilli()
-	for _, pt := range pts {
-		d.data = append(d.data, Centroid{Timestamp: sec, X: pt.X, Y: pt.Y})
+// StoreData stores a single frame's worth of centroids datapoint.
+func (d *Data) StoreData(pts <-chan image.Point) {
+	for pt := range pts {
+		sec := time.Now().UnixMilli()
+		d.data = append(d.data, centroid{Timestamp: sec, X: pt.X, Y: pt.Y})
 	}
 }
 
@@ -72,8 +71,8 @@ func (d *Data) StoreData(pts []image.Point) {
 // index=1 end_time of data to return in Unix milliseconds
 // index=2 step of data to return in integer value
 // -1 values mean don't apply filter.
-func (d *Data) GetData(filters []int64) []Centroid {
-	filtered_data := make([]Centroid, 0, len(d.data))
+func (d *Data) GetData(filters []int64) []centroid {
+	filtered_data := make([]centroid, 0, len(d.data))
 
 	start := int64(-1)
 	if len(filters) > 0 {
@@ -91,10 +90,8 @@ func (d *Data) GetData(filters []int64) []Centroid {
 	}
 
 	step := 1
-	fmt.Print("\n", start, end, step)
 	for i := 0; i < len(d.data); i = i + step {
 		time := d.data[i].Timestamp
-		fmt.Print("\n", time >= start, (end == -1 || time <= end))
 		if time >= start && (end == -1 || time <= end) {
 			filtered_data = append(filtered_data, d.data[i])
 			step = skip
