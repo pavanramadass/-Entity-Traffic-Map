@@ -52,7 +52,11 @@ func (h *Heatmap) GenerateHeatmap(data []centroid.Centroid, destination string) 
 	h.generateHeatmapImage(pixelCounts)
 
 	// Output heatmap to PNG file
-	heatmapFile, _ := os.Create(destination)
+	heatmapFile, err := os.Create(destination)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return ""
+	}
 	png.Encode(heatmapFile, h.heatmapImage)
 	heatmapFile.Close()
 
@@ -74,7 +78,6 @@ func (h *Heatmap) getPixelCounts(locations []centroid.Centroid) [][]int {
 
 		if pointCount > h.maxCount {
 			h.maxCount = pointCount
-			fmt.Print("\n", loc.X, loc.Y, h.maxCount)
 		}
 	}
 	return pixelCounts

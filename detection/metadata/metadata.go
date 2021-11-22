@@ -3,6 +3,7 @@ package metadata
 import (
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -14,7 +15,7 @@ import (
 	"detection/data"
 )
 
-const timeLayout string = "2006-12-31_15:04:05.000"
+const timeLayout string = "2006-12-31_15:04"
 
 type Metadata struct {
 	StartTime   time.Time `json:"starttime"`
@@ -42,6 +43,7 @@ func ImportMetadata(source string) []Metadata {
 
 	fileInfo, err := os.Stat(source)
 	if err != nil {
+		fmt.Println("Error:", err)
 		return nil
 	}
 
