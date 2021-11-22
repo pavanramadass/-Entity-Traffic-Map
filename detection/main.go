@@ -1,16 +1,14 @@
 package main
 
 import (
+	"detection/data"
+	"detection/metadata"
 	"fmt"
-	"io/ioutil"
-	"os"
-	"time"
-
+	"image"
 	"image/color"
+	"os"
 
 	"gocv.io/x/gocv"
-
-	"detection/data"
 )
 
 const MinimumArea = 3000
@@ -22,19 +20,26 @@ func main() {
 		return
 	}
 
+	// Initialize Data instance and import past data.
 	var data data.Data
+	data.Import(fileName)
+
+	// Create channel for passing new centroid points to data.
+	// Add 60 frames buffer in case storing is slower than processing.
+	points := make(chan image.Point, 60)
+
+	// // Start new go routine to consume centroid points.
+	go data.StoreData(points)
 
 	// parse args
 	deviceID := os.Args[1]
 
-	webcam, err := gocv.OpenVideoCapture(deviceID)
+	webcam, err := gocv.OpenVideoCapture("demo.avi")
 	if err != nil {
 		fmt.Printf("Error opening video capture device: %v\n", deviceID)
 		return
 	}
 	defer webcam.Close()
-
-	data.ImportData(fileName)
 
 	window := gocv.NewWindow("Motion Window")
 	defer window.Close()
@@ -56,16 +61,24 @@ func main() {
 		return
 	}
 
+	buffer, _ := gocv.IMEncode(gocv.PNGFileExt, img)
+
 	gocv.CvtColor(img, &img, gocv.ColorRGBToGray)
 
+	// // Initialize Data instance and import past data.
+	meta := metadata.NewMetadata(buffer.GetBytes(), "2021-11-21_23:59:59")
+	meta.AssociatedData = &data
+
 	fmt.Printf("Start reading device: %v\n", deviceID)
-	for {
+
+	for f := 0; f < 4500; f++ {
 		if ok := webcam.Read(&img); !ok {
 			fmt.Printf("Device closed: %v\n", deviceID)
 			break
 		}
 
 		if img.Empty() {
+			fmt.Println("Empty Frame")
 			continue
 		}
 
@@ -78,15 +91,14 @@ func main() {
 
 		gocv.CvtColor(img, &img, gocv.ColorGrayToBGR)
 
-		sec := time.Now().UnixMilli()
 		for i := 0; i < contours.Size(); i++ {
 			area := gocv.ContourArea(contours.At(i))
 			if area < MinimumArea {
 				continue
 			}
-
+			fmt.Println("Generating a point.")
 			point := gocv.MinAreaRect(contours.At(i)).Center
-			data.StoreData(sec, point.X, point.Y)
+			points <- point
 
 			gocv.Circle(&img, point, 5, color.RGBA{255, 0, 0, 0}, -1)
 
@@ -99,30 +111,8 @@ func main() {
 			break
 		}
 	}
-	data.ExportData(fileName)
-}
 
-// WriteFile writes to a file and returns false, nil for file, and function error message if condition is true.
-// Else, it returns true, file name, and function error message if condition is false.
-// The only parameter is the file name.
-func WriteFile(fileName) {
-	file, err := ioutil.WriteFile(fileName, outData, 0600)
-	if err != nil {
-		return false, nil, err
-	}
-
-	return true, file, err
-}
-
-// OpenVideoCapture opens the video capture device and returns false and error message if conditional is true.
-// Else, it returns true and error message if conditional is false.
-// It takes only one parameter: deviceID which is the ID of the video capture device.
-func OpenVideoCapture(deviceID) {
-	webcam, err := gocv.OpenVideoCapture(deviceID)
-	if err != nil {
-		fmt.Printf("Error opening video capture device: %v\n", deviceID)
-		return false, err
-	}
-	defer webcam.Close()
-	return true, err
+	close(points)
+	source, _ := meta.Export()
+	fmt.Println("Metadata exported to:", source)
 }
