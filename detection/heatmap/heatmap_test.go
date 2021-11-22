@@ -1,14 +1,33 @@
 package heatmap
 
 import (
+	"bytes"
+	"encoding/base64"
+	"entityDetection/detection/data"
+	"entityDetection/detection/metadata"
+	"fmt"
+	"image"
 	"testing"
 )
 
-const maxY, maxX int = 500, 600
+func TestGenerateHeatmapFrom4Min(t *testing.T) {
+	m := metadata.ImportMetadata("/home/pi/Entity-Traffic-Map/detection/meta_2021-1122-411_04:18.json")[0]
+	imageBytes, err := base64.StdEncoding.DecodeString(m.BaseImage)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	img, _, err := image.Decode(bytes.NewReader(imageBytes))
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	var d data.Data
+	d.Import("/home/pi/Entity-Traffic-Map/detection/2021-1122-411_04:18.json")
 
-func TestGenerateHeatmapFromCSVFile(t *testing.T) {
-	heatmap := NewHeatmap(maxX, maxY)
-	heatmap.GenerateHeatmap(StoredData, "test.png")
+	fmt.Println(img.Bounds().Max.X, img.Bounds().Max.Y)
+	heatmap := NewHeatmap(img.Bounds().Max.X, img.Bounds().Max.Y)
+	heatmap.GenerateHeatmap(d.GetData([]int64{}), "test.png")
 }
 
 func TestNewHeatmap(t *testing.T) {
@@ -30,20 +49,3 @@ func TestgenerateHeatmapImage(t *testing.T) {
 func TestpixelCountToColor(t *testing.T) {
 
 }
-
-/*
-// TestHeatMapMinutes tests the heatmap to graph 1 to 2 mins of data.
-func TestHeatMapMinutes(t *testing.T) {
-
-}
-
-// TestHeatMapHours tests the heatmap to graph 1 to 2 hours of data.
-func TestHeatMapHours(t *testing.T) {
-
-}
-
-// TestHeatMapDays tests the heatmap to graph 1 to 2 days of data.
-func TestHeatMapDays(t *testing.T) {
-
-}
-*/

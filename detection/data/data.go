@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"image"
 	"os"
 	"time"
@@ -8,7 +9,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"detection/centroid"
+	"entityDetection/detection/centroid"
 )
 
 // Data struct stores Centroids in a list.
@@ -21,13 +22,15 @@ type Data struct {
 func (d *Data) Import(source string) error {
 	fileInfo, err := os.Stat(source)
 	if err != nil {
-		return err
+		fmt.Println("Error:", err)
+		return nil
 	}
 
 	if fileInfo.IsDir() {
 		items, err := ioutil.ReadDir(".")
 		if err != nil {
-			return err
+			fmt.Println("Error:", err)
+			return nil
 		}
 		for _, item := range items {
 			d.Import(item.Name())
@@ -35,13 +38,15 @@ func (d *Data) Import(source string) error {
 	} else {
 		file, err := os.OpenFile(source, os.O_CREATE, 0600)
 		if err != nil {
-			return err
+			fmt.Println("Error:", err)
+			return nil
 		}
 		defer file.Close()
 
 		imported_data, err := ioutil.ReadAll(file)
 		if err != nil {
-			return err
+			fmt.Println("Error:", err)
+			return nil
 		}
 
 		var temp_data []centroid.Centroid
@@ -59,7 +64,8 @@ func (d *Data) ExportData(destination string) error {
 
 	err := ioutil.WriteFile(destination, out_data, 0600)
 	if err != nil {
-		return err
+		fmt.Println("Error:", err)
+		return nil
 	}
 
 	return nil
