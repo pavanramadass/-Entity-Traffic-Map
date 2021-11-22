@@ -19,7 +19,8 @@
     <body>
         <div class="container">
             <div id="camera-view">
-                <iframe src="localhost:8080/videoStream" title="Camera Stream"></iframe>
+                <iframe id="cam-iframe" src="/videoStream" title="Camera Stream" width="640" height="442" scrolling="no" frameborder=no marginheight="0px" class="center"></iframe>
+                <img id="heatmap-img" src="detection/heatmap/test.png" width="0" height="0" class="center">
             </div>
             <div class="row">
                 <div class="triple_button" id = "schedule_button" onclick="collection_modal()">Schedule Data Collection</div>

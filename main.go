@@ -25,10 +25,9 @@ var (
 	err       error
 	webcam    *gocv.VideoCapture
 	stream    *mjpeg.Stream
-  StartTime time.Time
-  EndTime   time.Time
+	StartTime time.Time
+	EndTime   time.Time
 )
-
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/form" {
@@ -95,8 +94,8 @@ func main() {
 	http.Handle("/", fs)
 	http.HandleFunc("/form", handleRequest)
 
-	deviceID := 1
-	host := 8080
+	deviceID := -1
+	host := ":8080"
 	webcam, err = gocv.OpenVideoCapture(deviceID)
 	if err != nil {
 		fmt.Printf("Error opening capture device: %v\n", deviceID)

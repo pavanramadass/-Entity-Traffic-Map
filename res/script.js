@@ -30,10 +30,12 @@ function download_modal() {
 
 function heat_map_modal() {
     var button = document.getElementById("generate_button");
-    var cameraView = document.getElementById("camera-view");
     if (button.innerHTML != 'Generate Heat Map') {
+        document.getElementById("cam-iframe").width = 640;
+        document.getElementById("cam-iframe").height = 442;
+        document.getElementById("heatmap-img").width = 0;
+        document.getElementById("heatmap-img").height = 0;  
         button.innerHTML = 'Generate Heat Map';
-        cameraView.style.backgroundImage = "url('res/image/stock.jpg')";
         return;
     }
     document.getElementById("modal").style.display = "block";
@@ -151,13 +153,15 @@ function generate_map() {
             console.log(response);
             json = JSON.parse(response);
             var button = document.getElementById("generate_button");
-            var cameraView = document.getElementById("camera-view");
             if (button.innerHTML == 'Generate Heat Map') {
+                console.log('MAP');
+                console.log(document.getElementById("cam-iframe"));
+                console.log(document.getElementById("heatmap-img"));
+                document.getElementById("cam-iframe").width = 0;
+                document.getElementById("cam-iframe").height = 0;
+                document.getElementById("heatmap-img").width = 640;
+                document.getElementById("heatmap-img").height = 442;
                 button.innerHTML = 'Return to Map View';
-                cameraView.style.backgroundImage = json.Data_Content;
-            } else {
-                button.innerHTML = 'Generate Heat Map';
-                cameraView.style.backgroundImage = "url('res/image/stock.jpg')";
             }
             close_modal();
         }

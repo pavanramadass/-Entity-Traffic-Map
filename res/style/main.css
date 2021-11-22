@@ -23,10 +23,17 @@ select {
 #camera-view {
     height:70vh;
     width: 97vw;
-    background-color: aqua;
-    background-image: url("../image/stock.jpg");
+    background-color: black;
     border: 5px solid red;
 }
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
 
 .container {
     height: 100vh;
