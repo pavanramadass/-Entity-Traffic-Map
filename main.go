@@ -6,6 +6,9 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/hybridgroup/mjpeg"
+	"gocv.io/x/gocv"
 )
 
 type test_struct struct {
@@ -17,8 +20,15 @@ type test_struct struct {
 
 const timeLayout = "2021-January-1"
 
-var StartTime time.Time
-var EndTime time.Time
+var (
+	deviceID  int
+	err       error
+	webcam    *gocv.VideoCapture
+	stream    *mjpeg.Stream
+  StartTime time.Time
+  EndTime   time.Time
+)
+
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/form" {
@@ -61,10 +71,51 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func mjpegCapture() {
+	img := gocv.NewMat()
+	defer img.Close()
+
+	for {
+		if ok := webcam.Read(&img); !ok {
+			fmt.Printf("Device closed: %v\n", deviceID)
+			return
+		}
+		if img.Empty() {
+			continue
+		}
+
+		buf, _ := gocv.IMEncode(".jpg", img)
+		stream.UpdateJPEG(buf.GetBytes())
+		buf.Close()
+	}
+}
+
 func main() {
 	fs := http.FileServer(http.Dir("./"))
 	http.Handle("/", fs)
 	http.HandleFunc("/form", handleRequest)
+
+	deviceID := 1
+	host := 8080
+	webcam, err = gocv.OpenVideoCapture(deviceID)
+	if err != nil {
+		fmt.Printf("Error opening capture device: %v\n", deviceID)
+		return
+	}
+	defer webcam.Close()
+
+	// create the mjpeg stream
+	stream = mjpeg.NewStream()
+
+	// start capturing
+	go mjpegCapture()
+
+	fmt.Println("Capturing. Point your browser to " + host)
+
+	// start http server
+	http.Handle("/videoStream", stream)
+	log.Fatal(http.ListenAndServe(host, nil))
+
 	log.Println("Listening on port 8080...")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
