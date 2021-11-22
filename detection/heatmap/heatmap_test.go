@@ -2,9 +2,9 @@ package heatmap
 
 import (
 	"bytes"
-	"detection/data"
-	"detection/metadata"
 	"encoding/base64"
+	"entityDetection/detection/data"
+	"entityDetection/detection/metadata"
 	"fmt"
 	"image"
 	"testing"

@@ -1,4 +1,4 @@
-module detection
+module entityDetection
 
 go 1.17
 

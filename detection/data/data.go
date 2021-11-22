@@ -9,7 +9,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"detection/centroid"
+	"entityDetection/detection/centroid"
 )
 
 // Data struct stores Centroids in a list.

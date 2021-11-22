@@ -11,8 +11,8 @@ import (
 
 	_ "image/png"
 
-	"detection/centroid"
-	"detection/data"
+	"entityDetection/detection/centroid"
+	"entityDetection/detection/data"
 )
 
 const timeLayout string = "2006-12-31_15:04"

@@ -1,7 +1,7 @@
 package data
 
 import (
-	"detection/centroid"
+	"entityDetection/detection/centroid"
 	"image"
 	"os"
 	"reflect"

@@ -1,18 +1,25 @@
 package main
 
 import (
+	"encoding/json"
+	"entityDetection/detection"
+	"fmt"
 	"log"
 	"net/http"
-	"encoding/json"
+	"time"
 )
 
 type test_struct struct {
 	Request_Type string
-	Start_Date string
-	End_Date string
+	Start_Date   string
+	End_Date     string
 	Data_Content string
 }
 
+const timeLayout = "2021-January-1"
+
+var StartTime time.Time
+var EndTime time.Time
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/form" {
@@ -23,7 +30,8 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET": // THIS SHOULD RETURN AN OBJECT TYPE OF 'Year-Month-DD' dependent on the current schedule
 		log.Println("Returning current schedule")
-		w.Write([]byte(`{"Request_Type": "get_schedule", "Start_Date": "2021-January-1", "End_Date": "2021-January-1"}`))
+		message := fmt.Sprintf("{\"Request_Type\": \"get_schedule\", \"Start_Date\":%s, \"End_Date\": %s}", StartTime.Format(timeLayout), EndTime.Format(timeLayout))
+		w.Write([]byte(message))
 	case "POST":
 		decoder := json.NewDecoder(r.Body)
 		var t test_struct
@@ -31,20 +39,24 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err)
 		}
-		if (t.Request_Type == "data_schedule") { // THIS SHOULD RETURN AN OBJECT TYPE OF 'Year-Month-DD' dependent on the current schedule
+		message := fmt.Sprintf("{\"Request_Type\": \"get_schedule\", \"Start_Date\":%s, \"End_Date\": %s}", t.Start_Date, t.End_Date)
+		kill := make(chan bool, 1)
+		if t.Request_Type == "data_schedule" { // THIS SHOULD RETURN AN OBJECT TYPE OF 'Year-Month-DD' dependent on the current schedules
+			go detection.Detection(kill, t.End_Date)
 			log.Println("Data scheduling requested")
-			res := []byte(`{"Request_Type":"` + t.Request_Type + `", "Start_Date": "` + t.Start_Date + `", "End_Date": "` + t.End_Date + `"}`)
+			res := []byte(message)
 			w.Write(res)
-		} else if (t.Request_Type == "edit_schedule") { // THIS SHOULD RETURN AN OBJECT TYPE OF 'Year-Month-DD' dependent on the current schedule
+		} else if t.Request_Type == "edit_schedule" { // THIS SHOULD RETURN AN OBJECT TYPE OF 'Year-Month-DD' dependent on the current schedule
 			log.Println("Edit scheduling requested")
-			res := []byte(`{"Request_Type":"` + t.Request_Type + `", "Start_Date": "` + t.Start_Date + `", "End_Date": "` + t.End_Date + `"}`)
+			res := []byte(message)
 			w.Write(res)
-		} else if (t.Request_Type == "map_generation") { // Data_Content should be updated to send back the path to the img file which has the map
+		} else if t.Request_Type == "map_generation" { // Data_Content should be updated to send back the path to the img file which has the map
 			log.Println("Map generation requested")
-			res := []byte(`{"Request_Type":"` + t.Request_Type + `", "Data_Content": "url('res/image/filled.png')"}`)
+			res := []byte(`{"Request_Type":"` + t.Request_Type + `", "Data_Content": "url('detection/heatmap/test.png')"}`)
 			w.Write(res)
-		} else if (t.Request_Type == "cancel_schedule") { // Nothing really needs to be returned here, just cancel the schedule
+		} else if t.Request_Type == "cancel_schedule" { // Nothing really needs to be returned here, just cancel the schedule
 			log.Println("Cancelling schedule")
+			close(kill)
 			res := []byte(`{"Request_Type:"` + t.Request_Type + `"}`)
 			w.Write(res)
 		}

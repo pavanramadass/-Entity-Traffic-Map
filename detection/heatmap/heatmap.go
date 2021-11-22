@@ -8,7 +8,7 @@ import (
 	"math"
 	"os"
 
-	"detection/centroid"
+	"entityDetection/detection/centroid"
 )
 
 type Heatmap struct {

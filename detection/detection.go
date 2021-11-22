@@ -1,18 +1,21 @@
-package main
+package detection
 
 import (
-	"detection/data"
-	"detection/metadata"
+	"entityDetection/detection/data"
+	"entityDetection/detection/metadata"
 	"fmt"
 	"image"
 	"os"
+	"time"
 
 	"gocv.io/x/gocv"
 )
 
 const MinimumArea = 3000
 
-func main() {
+var Meta metadata.Metadata
+
+func Detection(kill <-chan bool, endTime string) {
 	if len(os.Args) < 2 {
 		fmt.Println("How to run:\n\tmotion-detect [camera ID]")
 		return
@@ -57,11 +60,11 @@ func main() {
 	gocv.CvtColor(img, &img, gocv.ColorRGBToGray)
 
 	// Initialize Data instance and import past data.
-	meta := metadata.NewMetadata(buffer.GetBytes(), "2021-11-21_23:59:59")
+	Meta := metadata.NewMetadata(buffer.GetBytes(), endTime)
 
 	// Initialize Data instance and import past data.
 	var data data.Data
-	data.Import(meta.DataFile)
+	data.Import(Meta.DataFile)
 
 	// Create channel for passing new centroid points to data.
 	// Add 60 frames buffer in case storing is slower than processing.
@@ -70,11 +73,17 @@ func main() {
 	// Start new go routine to consume centroid points.
 	go data.StoreData(points)
 
-	meta.AssociatedData = &data
+	Meta.AssociatedData = &data
 
 	fmt.Printf("Start reading device: %v\n", deviceID)
 
-	for f := 0; f < 4500; f++ {
+	for Meta.StartTime.Before(time.Now()) && Meta.EndTime.After(time.Now()) {
+		_, ok := <-kill
+		if !ok {
+			fmt.Println("Kill")
+			break
+		}
+
 		if ok := webcam.Read(&img); !ok {
 			fmt.Printf("Device closed: %v\n", deviceID)
 			break
@@ -105,7 +114,7 @@ func main() {
 	}
 
 	close(points)
-	source, err := meta.Export()
+	source, err := Meta.Export()
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
