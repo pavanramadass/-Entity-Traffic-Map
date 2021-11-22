@@ -7,39 +7,47 @@ import (
 
 	"encoding/json"
 	"io/ioutil"
+
+	"detection/centroid"
 )
 
-// centroid struct holds location data:
-// Timestamp (millisecond precision), and X, Y pixel coordinates
-type centroid struct {
-	Timestamp int64
-	X, Y      int
-}
-
-// Data struct stores centroids in a list.
+// Data struct stores Centroids in a list.
 type Data struct {
-	data []centroid
+	data []centroid.Centroid
 }
 
 // ImportData imports data from a file into data.
 // If the file doesn't exist, create it.
-// data is cleared before import occurs.
-func (d *Data) ImportData(source string) error {
-	file, err := os.OpenFile(source, os.O_CREATE, 0600)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	imported_data, err := ioutil.ReadAll(file)
+func (d *Data) Import(source string) error {
+	fileInfo, err := os.Stat(source)
 	if err != nil {
 		return err
 	}
 
-	var temp_data []centroid
-	json.Unmarshal(imported_data, &temp_data)
-	d.data = append(d.data, temp_data...)
+	if fileInfo.IsDir() {
+		items, err := ioutil.ReadDir(".")
+		if err != nil {
+			return err
+		}
+		for _, item := range items {
+			d.Import(item.Name())
+		}
+	} else {
+		file, err := os.OpenFile(source, os.O_CREATE, 0600)
+		if err != nil {
+			return err
+		}
+		defer file.Close()
 
+		imported_data, err := ioutil.ReadAll(file)
+		if err != nil {
+			return err
+		}
+
+		var temp_data []centroid.Centroid
+		json.Unmarshal(imported_data, &temp_data)
+		d.data = append(d.data, temp_data...)
+	}
 	return nil
 }
 
@@ -57,12 +65,12 @@ func (d *Data) ExportData(destination string) error {
 	return nil
 }
 
-// StoreData stores a single centroid point at a time.
+// StoreData stores a single centroid.Centroid point at a time.
 // IT does so concurrently, consuming data points from a channel.
 func (d *Data) StoreData(pts <-chan image.Point) {
 	for pt := range pts {
 		sec := time.Now().UnixMilli()
-		d.data = append(d.data, centroid{Timestamp: sec, X: pt.X, Y: pt.Y})
+		d.data = append(d.data, centroid.Centroid{Timestamp: sec, X: pt.X, Y: pt.Y})
 	}
 }
 
@@ -72,8 +80,8 @@ func (d *Data) StoreData(pts <-chan image.Point) {
 // index=1 end_time of data to return in Unix milliseconds
 // index=2 step of data to return in integer value
 // -1 values mean don't apply filter.
-func (d *Data) GetData(filters []int64) []centroid {
-	filtered_data := make([]centroid, 0, len(d.data))
+func (d *Data) GetData(filters []int64) []centroid.Centroid {
+	filtered_data := make([]centroid.Centroid, 0, len(d.data))
 
 	start := int64(-1)
 	if len(filters) > 0 {
@@ -91,7 +99,7 @@ func (d *Data) GetData(filters []int64) []centroid {
 	}
 
 	step := 1
-	for i := 0; i < len(d.data); i = i + step {
+	for i := 0; i < len(d.data); i += step {
 		time := d.data[i].Timestamp
 		if time >= start && (end == -1 || time <= end) {
 			filtered_data = append(filtered_data, d.data[i])
