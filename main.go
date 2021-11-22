@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"entityDetection/detection"
 	"fmt"
 	"log"
 	"net/http"
@@ -30,7 +29,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET": // THIS SHOULD RETURN AN OBJECT TYPE OF 'Year-Month-DD' dependent on the current schedule
 		log.Println("Returning current schedule")
-		message := fmt.Sprintf("{\"Request_Type\": \"get_schedule\", \"Start_Date\":%s, \"End_Date\": %s}", StartTime.Format(timeLayout), EndTime.Format(timeLayout))
+		message := fmt.Sprintf("{\"Request_Type\": \"get_schedule\", \"Start_Date\":\"%s\", \"End_Date\": \"%s\"}", StartTime.Format(timeLayout), EndTime.Format(timeLayout))
 		w.Write([]byte(message))
 	case "POST":
 		decoder := json.NewDecoder(r.Body)
@@ -39,10 +38,9 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err)
 		}
-		message := fmt.Sprintf("{\"Request_Type\": \"get_schedule\", \"Start_Date\":%s, \"End_Date\": %s}", t.Start_Date, t.End_Date)
+		message := fmt.Sprintf("{\"Request_Type\": \"get_schedule\", \"Start_Date\":\"%s\", \"End_Date\": \"%s\"}", t.Start_Date, t.End_Date)
 		kill := make(chan bool, 1)
 		if t.Request_Type == "data_schedule" { // THIS SHOULD RETURN AN OBJECT TYPE OF 'Year-Month-DD' dependent on the current schedules
-			go detection.Detection(kill, t.End_Date)
 			log.Println("Data scheduling requested")
 			res := []byte(message)
 			w.Write(res)

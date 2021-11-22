@@ -5,7 +5,6 @@ import (
 	"entityDetection/detection/metadata"
 	"fmt"
 	"image"
-	"os"
 	"time"
 
 	"gocv.io/x/gocv"
@@ -16,17 +15,9 @@ const MinimumArea = 3000
 var Meta metadata.Metadata
 
 func Detection(kill <-chan bool, endTime string) {
-	if len(os.Args) < 2 {
-		fmt.Println("How to run:\n\tmotion-detect [camera ID]")
-		return
-	}
-
-	// parse args
-	deviceID := os.Args[1]
-
-	webcam, err := gocv.OpenVideoCapture("demo.avi")
+	webcam, err := gocv.OpenVideoCapture(-1)
 	if err != nil {
-		fmt.Printf("Error opening video capture device: %v\n", deviceID)
+		fmt.Printf("Error %s opening video capture device: 0\n", err)
 		return
 	}
 	defer webcam.Close()
@@ -47,7 +38,7 @@ func Detection(kill <-chan bool, endTime string) {
 	defer mog2.Close()
 
 	if ok := webcam.Read(&img); !ok {
-		fmt.Printf("Device closed: %v\n", deviceID)
+		fmt.Printf("Device closed: 0\n")
 		return
 	}
 
@@ -75,7 +66,7 @@ func Detection(kill <-chan bool, endTime string) {
 
 	Meta.AssociatedData = &data
 
-	fmt.Printf("Start reading device: %v\n", deviceID)
+	fmt.Printf("Start reading device: 0\n")
 
 	for Meta.StartTime.Before(time.Now()) && Meta.EndTime.After(time.Now()) {
 		_, ok := <-kill
@@ -85,7 +76,7 @@ func Detection(kill <-chan bool, endTime string) {
 		}
 
 		if ok := webcam.Read(&img); !ok {
-			fmt.Printf("Device closed: %v\n", deviceID)
+			fmt.Printf("Device closed: 0\n")
 			break
 		}
 
