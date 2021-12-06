@@ -26,7 +26,6 @@
 	<li><a href="#generating-heatmaps">Generating Heatmaps</a></li>
       </ul>
     </li>
-	
     <li><a href="#contributing">Contributing</a></li>
   </ol>
 </details>
