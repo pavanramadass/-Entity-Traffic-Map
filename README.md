@@ -18,7 +18,15 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li>
+      <a href="#usage">Usage</a>
+      <ul>
+	<li><a href="#scheduling-data-collection">Scheduling Data Collection</a></li>
+	<li><a href="#exporting-collected-data">Exporting Collected Data</a></li>
+	<li><a href="#generating-heatmaps">Generating Heatmaps</a></li>
+      </ul>
+    </li>
+	
     <li><a href="#contributing">Contributing</a></li>
   </ol>
 </details>
@@ -45,19 +53,24 @@ Everything you need to get your machine set up to use our software!
 
 ### Prerequisite Steps
 1. Install Go (Golang): [Installation Guide](https://go.dev/doc/install)
-2. Install OpenCV: [Installation Guide](https://docs.opencv.org/4.x/df/d65/tutorial_table_of_content_introduction.html)
+2. Install the latest version of OpenCV: [Installation Guide](https://docs.opencv.org/4.x/df/d65/tutorial_table_of_content_introduction.html)
 3. Install GoCV: [Installation Guide](https://gocv.io/getting-started/)
 
 ### Installation
 1. Download or clone our [repository](https://github.com/pavanramadass/-Entity-Traffic-Map).
     - Instructions for cloning a GitHub repository can be found [here](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository).
 2. Use your operating system's command line to navigate to the repository's top level folder in your local file storage.
-    - After opening the command line, run the command `cd $path` where $path is the file path leading to your copy of our repository.
+    - After opening the command line, run the command `cd $path` where `$path` is the file path leading to your copy of our repository.
 3. Execute `go run main.go` in the command line to start the program.
 
 <!-- USAGE -->
 ## Usage
 
+### Scheduling Data Collection
+
+### Exporting Collected Data
+
+### Generating Heatmaps
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -68,7 +81,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the project.
-2. Create your Feature Branch. (`git checkout -b feature/AmazingFeature`)
+2. Create a new branch for your feature. (`git checkout -b feature/AmazingFeature`)
     - Make sure to follow the [Style Guide](https://go.dev/doc/effective_go).
 3. Commit your changes. (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch. (`git push origin feature/AmazingFeature`)
