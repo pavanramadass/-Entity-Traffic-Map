@@ -52,7 +52,7 @@ Everything you need to get your machine set up to use our software!
 1. Download or clone our [repository](https://github.com/pavanramadass/-Entity-Traffic-Map).
     - Instructions for cloning a GitHub repository can be found [here](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository).
 2. Use your operating system's command line to navigate to the repository's top level folder in your local file storage.
-    - After opening the command line, run the command 'cd *path*' where *path* is the file path leading to your copy of our repository.
+    - After opening the command line, run the command `cd $path` where $path is the file path leading to your copy of our repository.
 3. Execute `go run main.go` in the command line to start the program.
 
 <!-- USAGE -->
