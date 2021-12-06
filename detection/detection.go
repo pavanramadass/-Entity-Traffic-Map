@@ -14,6 +14,7 @@ const MinimumArea = 3000
 
 var Meta metadata.Metadata
 
+// Detection captures and detects data from a video device
 func Detection(kill <-chan bool, endTime string) {
 	webcam, err := gocv.OpenVideoCapture(-1)
 	if err != nil {

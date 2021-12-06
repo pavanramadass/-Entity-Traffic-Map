@@ -1,3 +1,4 @@
+// Package metadata handles the creation and importation of metadata associated with a dataset
 package metadata
 
 import (
@@ -17,6 +18,7 @@ import (
 
 const timeLayout string = "2006-12-31_15:04"
 
+// Metadata stores parsed metadata read from JSON
 type Metadata struct {
 	StartTime   time.Time `json:"starttime"`
 	EndTime     time.Time `json:"endtime"`
@@ -27,6 +29,7 @@ type Metadata struct {
 	AssociatedData *data.Data `json:"-"`
 }
 
+// NewMetadata creates initial metadata for a dataset
 func NewMetadata(base_image []byte, endTime string) *Metadata {
 	m := new(Metadata)
 	m.StartTime = time.Now()
@@ -38,6 +41,7 @@ func NewMetadata(base_image []byte, endTime string) *Metadata {
 	return m
 }
 
+// ImportMetadata reads a JSON metadata file and parses it
 func ImportMetadata(source string) []Metadata {
 	var metas []Metadata
 

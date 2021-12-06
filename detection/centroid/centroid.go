@@ -1,4 +1,4 @@
-// centroid is a simple package to contain a data structure across classes.
+// Package centroid is a simple package to contain a data structure across classes.
 package centroid
 
 // Centroid struct holds location data:

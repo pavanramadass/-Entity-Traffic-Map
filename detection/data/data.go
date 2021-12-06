@@ -1,3 +1,4 @@
+// Package data handles importing and exporting data from files and filtering of the data
 package data
 
 import (
@@ -17,7 +18,7 @@ type Data struct {
 	data []centroid.Centroid
 }
 
-// ImportData imports data from a file into data.
+// Import imports data from a file into data.
 // If the file doesn't exist, create it.
 func (d *Data) Import(source string) error {
 	fileInfo, err := os.Stat(source)

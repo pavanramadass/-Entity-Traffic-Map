@@ -11,7 +11,7 @@ import (
 	"gocv.io/x/gocv"
 )
 
-type test_struct struct {
+type testStruct struct {
 	Request_Type string
 	Start_Date   string
 	End_Date     string
@@ -29,6 +29,7 @@ var (
 	EndTime   time.Time
 )
 
+// handleRequest processes HTTP requests received by the server
 func handleRequest(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/form" {
 		http.Error(w, "404 not found", http.StatusNotFound)
@@ -42,7 +43,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(message))
 	case "POST":
 		decoder := json.NewDecoder(r.Body)
-		var t test_struct
+		var t testStruct
 		err := decoder.Decode(&t)
 		if err != nil {
 			panic(err)
@@ -70,6 +71,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// mjpegCapture captures video from a camera device and creates a JPEG image
 func mjpegCapture() {
 	img := gocv.NewMat()
 	defer img.Close()

@@ -1,3 +1,4 @@
+// Package heatmap takes a dataset and generates a PNG heatmap
 package heatmap
 
 import (
@@ -11,18 +12,20 @@ import (
 	"entityDetection/detection/centroid"
 )
 
+// Heatmap stores a heatmap image with its maximum point count
 type Heatmap struct {
 	maxCount     int
 	heatmapImage *image.RGBA
 }
 
-// NewHeamap generates new Heatmap instance.
+// NewHeatmap generates new Heatmap instance.
 // Don't compute unless requested to.
 func NewHeatmap(imageWidth int, imageHeight int) *Heatmap {
 	heatmapImage := image.NewRGBA(image.Rect(0, 0, imageWidth, imageHeight))
 	return &Heatmap{heatmapImage: heatmapImage}
 }
 
+// getRect finds the maximum coordinate from a list of points
 func getRect(data []centroid.Centroid) (int, int) {
 	bottom := 0
 	left := 0
@@ -39,8 +42,8 @@ func getRect(data []centroid.Centroid) (int, int) {
 }
 
 // GenerateHeatmap chains several helper functions to calculate the heatmap,
-// then it writes the resultant image to a png. If the heatmap does not have
-// preset image dimentions it searches throuhg teh data for the maximum X and Y
+// then it writes the resultant image to a PNG. If the heatmap does not have
+// preset image dimensions it searches through the data for the maximum X and Y
 // coordinates and uses those to determine the image dimensions.
 func (h *Heatmap) GenerateHeatmap(data []centroid.Centroid, destination string) string {
 	if h.heatmapImage == nil {
@@ -63,8 +66,8 @@ func (h *Heatmap) GenerateHeatmap(data []centroid.Centroid, destination string) 
 	return destination
 }
 
-// GetPixelCounts generates a 2D array of teh same dimensions as the image.
-// It then counts the repsence of centroids at each pixel in the given data.
+// GetPixelCounts generates a 2D array of the same dimensions as the image.
+// It then counts the presence of centroids at each pixel in the given data.
 // It keeps track of min and max counts across all pixels.
 func (h *Heatmap) getPixelCounts(locations []centroid.Centroid) [][]int {
 	pixelCounts := make([][]int, h.heatmapImage.Rect.Size().X)
@@ -83,7 +86,7 @@ func (h *Heatmap) getPixelCounts(locations []centroid.Centroid) [][]int {
 	return pixelCounts
 }
 
-// generateHeatmapImage generates a png image using the image dimensions and pixel counts.
+// generateHeatmapImage generates a PNG image using the image dimensions and pixel counts.
 func (h *Heatmap) generateHeatmapImage(pixelCounts [][]int) {
 	for x, col := range pixelCounts {
 		for y, count := range col {
