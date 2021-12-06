@@ -14,7 +14,7 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisite steps">Prerequisite Steps</a></li>
+        <li><a href="#prerequisite-steps">Prerequisite Steps</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
@@ -44,9 +44,9 @@ Tabula Plena will be an entity recognizing application with an intended use of g
 Everything you need to get your machine set up to use our software!
 
 ### Prerequisite Steps
-1. Install Go (Golang): [Installation Guide](https://go.dev/doc/install).
-2. Install OpenCV: [Installation Guide](https://docs.opencv.org/4.x/df/d65/tutorial_table_of_content_introduction.html).
-3. Install GoCV: [Installation Guide](https://gocv.io/getting-started/).
+1. Install Go (Golang): [Installation Guide](https://go.dev/doc/install)
+2. Install OpenCV: [Installation Guide](https://docs.opencv.org/4.x/df/d65/tutorial_table_of_content_introduction.html)
+3. Install GoCV: [Installation Guide](https://gocv.io/getting-started/)
 
 ### Installation
 1. Download or clone our [repository](https://github.com/pavanramadass/-Entity-Traffic-Map).
