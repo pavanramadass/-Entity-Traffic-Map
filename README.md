@@ -69,7 +69,7 @@ Don't forget to give the project a star! Thanks again!
 
 1. Fork the project.
 2. Create your Feature Branch. (`git checkout -b feature/AmazingFeature`)
-    - Make sure to follow to [Style Guide](https://go.dev/doc/effective_go).
+    - Make sure to follow the [Style Guide](https://go.dev/doc/effective_go).
 3. Commit your changes. (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch. (`git push origin feature/AmazingFeature`)
 5. Open a pull request.
