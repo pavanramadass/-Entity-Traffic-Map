@@ -20,7 +20,7 @@ type Metadata struct {
 	ImageHeight  int    `json:"image_height"`
 }
 
-// GenerateHeatmapFromCSVFile does ... 
+// GenerateHeatmapFromCSVFile does ...
 func GenerateHeatmapFromCSVFile(metaDataFileName string) {
 	// Open and read metadata file
 	metaDataFile, err := os.Open(metaDataFileName)
@@ -68,10 +68,10 @@ func GenerateHeatmapFromCSVFile(metaDataFileName string) {
 	png.Encode(heatmapFile, heatmap)
 	heatmapFile.Close()
 
-	return true 
+	return true
 }
 
-// GetPixelCounts does ... 
+// GetPixelCounts does ...
 func getPixelCounts(data [][]string, imageWidth int, imageHeight int) ([][]int, int, int) {
 	// Create 2D array the same size as the image
 	pixelCounts := make([][]int, imageWidth)
@@ -102,7 +102,7 @@ func getPixelCounts(data [][]string, imageWidth int, imageHeight int) ([][]int, 
 	return pixelCounts, minCount, maxCount
 }
 
-// GenerateHeatmapImage generates a png image using the image dimensions and pixel counts. 
+// GenerateHeatmapImage generates a png image using the image dimensions and pixel counts.
 func generateHeatmapImage(pixelCounts [][]int, minCount int, maxCount int, imageWidth int, imageHeight int) image.Image {
 	heatmapImage := image.NewRGBA(image.Rect(0, 0, imageWidth, imageHeight))
 	for x, col := range pixelCounts {
@@ -114,7 +114,7 @@ func generateHeatmapImage(pixelCounts [][]int, minCount int, maxCount int, image
 
 }
 
-// PixelCountToColor maps the centroid count at each pixel to a corresponding color and intensity. 
+// PixelCountToColor maps the centroid count at each pixel to a corresponding color and intensity.
 func pixelCountToColor(count int, min int, max int) color.RGBA {
 	r, g, b := 0, 0, 0
 
