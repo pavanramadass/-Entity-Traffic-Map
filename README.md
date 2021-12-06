@@ -14,11 +14,12 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#prerequisite steps">Prerequisite Steps</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#contributing">Contributing</a></li>
   </ol>
 </details>
 
@@ -40,11 +41,22 @@ Tabula Plena will be an entity recognizing application with an intended use of g
 <!-- GETTING STARTED -->
 ## Getting Started
 
-1. Install Go (Golang).
-2. Install GoCV.
-3. Download or clone our repository.
-4. Navigate to the repository's top level folder.
-5. Execute `go run main.go` in the command line.
+Everything you need to get your machine set up to use our software!
+
+### Prerequisite Steps
+1. Install Go (Golang): [Installation Guide](https://go.dev/doc/install).
+2. Install OpenCV: [Installation Guide](https://docs.opencv.org/4.x/df/d65/tutorial_table_of_content_introduction.html).
+3. Install GoCV: [Installation Guide](https://gocv.io/getting-started/).
+
+### Installation
+1. Download or clone our [repository](https://github.com/pavanramadass/-Entity-Traffic-Map).
+    - Instructions for cloning a GitHub repository can be found [here](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository).
+2. Use your operating system's command line to navigate to the repository's top level folder in your local file storage.
+    - After opening the command line, run the command 'cd *path*' where *path* is the file path leading to your copy of our repository.
+3. Execute `go run main.go` in the command line to start the program.
+
+<!-- USAGE -->
+## Usage
 
 
 <!-- CONTRIBUTING -->
@@ -55,11 +67,12 @@ Contributions are what make the open source community such an amazing place to l
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Fork the project.
+2. Create your Feature Branch. (`git checkout -b feature/AmazingFeature`)
+    - Make sure to follow to [Style Guide](https://go.dev/doc/effective_go).
+3. Commit your changes. (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch. (`git push origin feature/AmazingFeature`)
+5. Open a pull request.
 
 <!-- LICENSE -->
 ## License
