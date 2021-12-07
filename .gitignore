@@ -3,3 +3,5 @@
 meta*.json
 2021*.json
 *.py
+!detection/meta_2021-1122-411_04_18.json
+!detection/2021-1122-411_04_18.json
