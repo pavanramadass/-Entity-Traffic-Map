@@ -17,6 +17,7 @@ jobs:
       uses: EJRMdlRR/setup-opencv-action@v2
       with:
         opencv-version: '4.0.0'
+        GENERATE_PKGCONFIG: ON
   
     - name: Set up Go
       uses: actions/setup-go@v2
@@ -32,9 +33,3 @@ jobs:
       run: |
         cd ./detection
         go test -v
-  
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: gh-pages
