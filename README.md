@@ -19,12 +19,16 @@
       </ul>
     </li>
     <li>
-      <a href="#usage">Usage</a>
+      <a href="#features">Features</a>
       <ul>
-	<li><a href="#scheduling-data-collection">Scheduling Data Collection</a></li>
-	<li><a href="#exporting-collected-data">Exporting Collected Data</a></li>
-	<li><a href="#generating-heatmaps">Generating Heatmaps</a></li>
+	<li><a href="#simple-intuitive-ui">Simple, Intuitive UI</a></li>
+	<li><a href="#automated-schedulable-data-collection">Automated, Schedulable Data Collection</a></li>
+	<li><a href="#raw-data-exportation-for-custom-analysis">Raw Data Exportation for Custom Analysis</a></li>
+	<li><a href="#heatmap-generation">Heatmap Generation</a></li>
       </ul>
+    </li>
+    <li>
+      <a href="#release-notes">Release Notes</a>
     </li>
     <li><a href="#contributing">Contributing</a></li>
   </ol>
@@ -62,14 +66,26 @@ Everything you need to get your machine set up to use our software!
     - After opening the command line, run the command `cd $path` where `$path` is the file path leading to your copy of our repository.
 3. Execute `go run main.go` in the command line to start the program.
 
-<!-- USAGE -->
-## Usage
+<!-- FEATURES -->
+## Features
 
-### Scheduling Data Collection
+### Simple, Intuitive UI
+Tabula Plena's UI is designed to allow a user with basic computer knowledge to easily utilize all our provided features without requiring an in-depth tutorial. The UI features simple, self-explanatory options and visual indicators of successful use.
 
-### Exporting Collected Data
+### Automated, Schedulable Data Collection
+Tabula Plena's primary feature is the automation of the collection of foot traffic data in buildings. Data collection can be scheduled for a set time period and the software will handle the rest, using computer vision to collect foot traffic data from a top-down video feed. Scheduled collection times can be modified, and active collection can be cancelled; the collected data is stored by the software when a scheduled collection ends, or when an active one is cancelled. 
 
-### Generating Heatmaps
+### Raw Data Exportation for Custom Analysis
+Tabula Plena stores collected foot traffic data by associating a Unix UTC timestamp with X and Y coordinates. The timestamp is taken when an entity is detected by the software, and the X and Y coordinates correspond to the pixel location of the detected entity's centroid in the camera's FOV. Provided metadata includes start and end times, as well as a base image taken from the camera feed. Tabula Plena allows users to download collected data in .json format for their own use and custom analysis.
+
+> ***PRIVACY STATEMENT:*** Outside of the single base image of the camera feed, no actual video images are saved. Only the timestamp of detection and X and Y pixel coordinates are saved.
+
+### Heatmap Generation 
+One possible use of the data provided by Tabula Plena is the generation of foot traffic heatmaps. Tabula Plena offers a foot traffic heatmap generation tool for in-app analysis of collected data. Most data points are displayed as green dots, with higher traffic areas shown via warmer tones approaching red. The heatmap can be overlayed on the base image included with the metadata to put the data in context.
+
+<!-- RELEASE NOTES -->
+## Release Notes
+
 
 <!-- CONTRIBUTING -->
 ## Contributing
