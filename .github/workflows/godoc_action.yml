@@ -16,7 +16,7 @@ jobs:
     - name: Set up OpenCV
       uses: EJRMdlRR/setup-opencv-action@v2
       with:
-        opencv-version: '4.0.0'
+        opencv-version: '4.5.4'
         GENERATE_PKGCONFIG: ON
   
     - name: Set up Go
