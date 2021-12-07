@@ -72,7 +72,7 @@ func TestGenerateHeatmapImage(t *testing.T) {
 	heatmap := NewHeatmap(img.Bounds().Max.X, img.Bounds().Max.Y)
 
 	var d data.Data
-	d.Import("/home/pi/Entity-Traffic-Map/detection/2021-1122-411_04:18.json")
+	d.Import("/home/pi/Entity-Traffic-Map/detection/2021-1122-411_04_18.json")
 
 	pixelCounts := heatmap.getPixelCounts(d.GetData([]int64{}))
 
@@ -82,7 +82,7 @@ func TestGenerateHeatmapImage(t *testing.T) {
 // Mathetmatical checs to be implemented, for now non-crashing is sufficient
 func TestPixelCountToColor(t *testing.T) {
 	var d data.Data
-	d.Import("/home/pi/Entity-Traffic-Map/detection/2021-1122-411_04:18.json")
+	d.Import("/home/pi/Entity-Traffic-Map/detection/2021-1122-411_04_18.json")
 
 	var h Heatmap
 
