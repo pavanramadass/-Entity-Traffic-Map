@@ -5,31 +5,10 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisite-steps">Prerequisite Steps</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#features">Features</a>
-      <ul>
-	<li><a href="#simple-intuitive-ui">Simple, Intuitive UI</a></li>
-	<li><a href="#automated-schedulable-data-collection">Automated, Schedulable Data Collection</a></li>
-	<li><a href="#raw-data-exportation-for-custom-analysis">Raw Data Exportation for Custom Analysis</a></li>
-	<li><a href="#heatmap-generation">Heatmap Generation</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#release-notes">Release Notes</a>
-    </li>
+    <li><a href="#about-the-project">About The Project</a></li>
+    <li><a href="#getting-started">Getting Started</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#release-notes">Release Notes</a></li>
     <li><a href="#contributing">Contributing</a></li>
   </ol>
 </details>
