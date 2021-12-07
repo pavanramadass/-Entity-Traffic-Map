@@ -2,3 +2,4 @@
 *.mjpg
 meta*.json
 2021*.json
+*.py

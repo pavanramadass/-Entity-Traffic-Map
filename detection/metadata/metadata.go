@@ -16,7 +16,9 @@ import (
 	"entityDetection/detection/data"
 )
 
-const timeLayout string = "2006-12-31_15:04"
+const TimeLayout string = "2006-01-02_15_04"
+
+var loc, _ = time.LoadLocation("EST")
 
 // Metadata stores parsed metadata read from JSON
 type Metadata struct {
@@ -33,9 +35,9 @@ type Metadata struct {
 func NewMetadata(base_image []byte, endTime string) *Metadata {
 	m := new(Metadata)
 	m.StartTime = time.Now()
-	m.DataFile = m.StartTime.Format(timeLayout) + ".json"
+	m.DataFile = m.StartTime.Format(TimeLayout) + ".json"
 	m.BaseImage = base64.StdEncoding.EncodeToString(base_image)
-	m.EndTime, _ = time.Parse(timeLayout, endTime)
+	m.EndTime, _ = time.ParseInLocation(TimeLayout, endTime, loc)
 	m.AssociatedData = nil
 
 	return m
@@ -105,7 +107,7 @@ func (m *Metadata) GetData(filters map[string]string) ([]centroid.Centroid, erro
 	dataFilters := []int64{-1, -1, -1}
 
 	if start_str, ok := filters["start"]; ok {
-		start, err := time.Parse(timeLayout, start_str)
+		start, err := time.ParseInLocation(TimeLayout, start_str, loc)
 		if err != nil {
 			return nil, err
 		}
@@ -113,7 +115,7 @@ func (m *Metadata) GetData(filters map[string]string) ([]centroid.Centroid, erro
 	}
 
 	if end_str, ok := filters["end"]; ok {
-		end, err := time.Parse(timeLayout, end_str)
+		end, err := time.ParseInLocation(TimeLayout, end_str, loc)
 		if err != nil {
 			return nil, err
 		}
@@ -121,7 +123,7 @@ func (m *Metadata) GetData(filters map[string]string) ([]centroid.Centroid, erro
 	}
 
 	if step_str, ok := filters["step"]; ok {
-		step, err := time.Parse(timeLayout, step_str)
+		step, err := time.ParseInLocation(TimeLayout, step_str, loc)
 		if err != nil {
 			return nil, err
 		}

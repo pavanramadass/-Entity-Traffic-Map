@@ -13,6 +13,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Set up OpenCV
+      uses: EJRMdlRR/setup-opencv-action@v2
+      with:
+        opencv-version: '4.0.0'
+  
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
@@ -27,17 +32,6 @@ jobs:
       run: |
         cd ./detection
         go test -v
- # main:
- #   runs-on: ubuntu-latest
- #   name: Example
- #   steps:
- #   - name: Checkout
- #     uses: actions/checkout@v1
- # 
- #   - name: Generate GoDoc
- #     uses: ktr0731/godoc-action@v0.1.0
- #     env:
- #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
     - name: Push changes
       uses: ad-m/github-push-action@master

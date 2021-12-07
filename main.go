@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/json"
+	"entityDetection/detection"
+	"entityDetection/detection/metadata"
 	"fmt"
 	"log"
 	"net/http"
@@ -18,7 +20,9 @@ type testStruct struct {
 	Data_Content string
 }
 
-const timeLayout = "2021-January-1"
+const timeLayout = "2006-January-2"
+
+var loc, _ = time.LoadLocation("EST")
 
 var (
 	deviceID  int
@@ -27,6 +31,8 @@ var (
 	stream    *mjpeg.Stream
 	StartTime time.Time
 	EndTime   time.Time
+	Meta      *metadata.Metadata
+	t         testStruct
 )
 
 // handleRequest processes HTTP requests received by the server
@@ -43,8 +49,16 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(message))
 	case "POST":
 		decoder := json.NewDecoder(r.Body)
-		var t testStruct
 		err := decoder.Decode(&t)
+		if err != nil {
+			panic(err)
+		}
+
+		StartTime, err = time.ParseInLocation(timeLayout, t.Start_Date, loc)
+		if err != nil {
+			panic(err)
+		}
+		EndTime, err = time.ParseInLocation(timeLayout, t.End_Date, loc)
 		if err != nil {
 			panic(err)
 		}
@@ -52,6 +66,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 		kill := make(chan bool, 1)
 		if t.Request_Type == "data_schedule" { // THIS SHOULD RETURN AN OBJECT TYPE OF 'Year-Month-DD' dependent on the current schedules
 			log.Println("Data scheduling requested")
+			fmt.Println(StartTime, "to", EndTime)
 			res := []byte(message)
 			w.Write(res)
 		} else if t.Request_Type == "edit_schedule" { // THIS SHOULD RETURN AN OBJECT TYPE OF 'Year-Month-DD' dependent on the current schedule
@@ -68,6 +83,30 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 			res := []byte(`{"Request_Type:"` + t.Request_Type + `"}`)
 			w.Write(res)
 		}
+	}
+	kill := make(chan bool, 300)
+	catch := make(chan string, 300)
+	bytes := make(chan []byte, 300)
+	fmt.Println(StartTime.Before(time.Now()), EndTime.After(time.Now()))
+
+	if StartTime.Before(time.Now()) && EndTime.After(time.Now()) {
+		fmt.Println("Selection started.")
+		go detection.Detection(kill, catch, bytes)
+	} else {
+		kill <- false
+	}
+
+	select {
+	case imageBytes := <-bytes:
+		Meta = metadata.NewMetadata(imageBytes, t.End_Date)
+	default:
+	}
+
+	select {
+	case caught := <-catch:
+		Meta.DataFile = caught
+		Meta.Export()
+	default:
 	}
 }
 
